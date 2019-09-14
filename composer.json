@@ -9,10 +9,12 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "abraham/twitteroauth": "^1.0",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "phpspec/phpspec": "^5.1"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

@@ -14,6 +14,6 @@ class Birra extends Model
     public $timestamps = false;
 
     protected $fillable = [
-      'id','id_beer','nome_birra', 'description','image_url'
+      'id','id_beer','nome_birra', 'description','image_url','gradazione'
     ];
 }

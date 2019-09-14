@@ -73,7 +73,6 @@
             <div class="content">
                 <div class="title m-b-md">
                     HappyBeerDay
-                     {{ birra }}
                 </div>
                 <button name="button"  id="chiamataGet" onclick="getBeer();" type="button"><span>Get Random Beer</span></button>
             </div>

@@ -16,3 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/beer', 'BeerControllers@casualBeer');
+
+Route::any('/api.possoguidare','BeerControllers@guidaSicura');
+
+Route::any('/api.guida','BeerControllers@api_guida');
+
+Route::any('/getBeerValue','BeerControllers@getBeerValue');

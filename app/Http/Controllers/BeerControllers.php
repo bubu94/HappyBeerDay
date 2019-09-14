@@ -59,10 +59,11 @@ class BeerControllers extends Controller {
              $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $access_token, $access_token_secret);
              $content = $connection->get("account/verify_credentials");
             //create user to store in session
-            if($x[0]->image_url==''){
-              casualBeer();
+            while($x[0]->image_url==''){
+              $result = $this->httpHelper->get("https://api.punkapi.com/v2/beers/random",[]);
+              $x=array();
+              $x +=$result;
             }
-            else{
             $beer = new Birra();
             $beer->nome_birra = $x[0]->name;
             $beer->id_beer = $x[0]->id;
@@ -71,10 +72,11 @@ class BeerControllers extends Controller {
             $beer->gradazione = $x[0]->abv;
             $beer->save();
             $statues = $connection->post("statuses/update", ["status" => "#". $beer->id ." drunkard choose: ". $beer->image_url]);
-            return view('welcome');
+
+            return view('pages.success');
             /* Set any  user specific fields returned by the api request*/
           }
-        } catch(\GuzzleHttp\Exception\ClientException $e) {
+        catch(\GuzzleHttp\Exception\ClientException $e) {
             //remove user and authenticated from session
             //redirect back with error
             return redirect()->back()->with('error', 'Credenziali non valide');

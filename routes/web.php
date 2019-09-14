@@ -21,4 +21,4 @@ Route::any('/api.possoguidare','BeerControllers@guidaSicura');
 
 Route::any('/api.guida','BeerControllers@api_guida');
 
-Route::any('/getBeerValue','BeerControllers@getBeerValue');
+Route::any('/api.getBeerValue','BeerControllers@getBeerValue');

@@ -81,14 +81,18 @@ class BeerControllers extends Controller {
         }
       }
       public function api_guida(){
-        $result =" Fare richiesta come mostrato nell'esempio che segue: \n";
+        $result =" Per scoprire se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
         $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
         $result .=" ove: [
                       gradazione = gradazione alcolica della bevanda;
                       quantita = quantita in litra ingerita (se decimale usare il punto '.' es: 0.33 NON 0,33);
                       peso = peso corporeo espresso in kg;
                       sesso = sesso della persona (passare i parametri 'M' o 'F');
-                        ]";
+                        ]            ";
+
+      $result .= "         Se invece vuoi un suggerimento per una birra della
+      gradazione che vuoi, fai richiesta come mostrato nell'esempio che segue: 127.0.0.1:8000/api.getBeerValue?gradazione=%
+      dove al posto di % va inserita la gradazione che desideri, ti verrà restituita una birra casuale con quella gradazione!";
         return response($result, 200);
       }
 

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('pages.azienda');
+    return view('pages.birra');
 });
 
 Route::get('/beer', 'BeerControllers@casualBeer')->name("birra");

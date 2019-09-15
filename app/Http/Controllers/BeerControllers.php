@@ -73,7 +73,7 @@ class BeerControllers extends Controller {
             $beer->save();
             $statues = $connection->post("statuses/update", ["status" => "#". $beer->id ." drunkard choose: ". $beer->image_url]);
 
-            return view('pages.success');
+            return view('pages.success', $result);
             /* Set any  user specific fields returned by the api request*/
           }
         catch(\GuzzleHttp\Exception\ClientException $e) {
@@ -134,7 +134,7 @@ class BeerControllers extends Controller {
           $result=$alcool*0.7;
         }
          if($result>0.5){
-          $result .=" SMETTI SUBITO DI DROGARTI PORCODIO";
+          $result .=" SMETTI SUBITO DI BERE e non metterti alla guida";
         }
         else{
           $result .=" Complimenti puoi guidare! Ma fallo responsabilmente!";

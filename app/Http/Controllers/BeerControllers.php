@@ -100,7 +100,7 @@ class BeerControllers extends Controller {
       }
 
       public function getBeerValue(Request $request){
-        if($request->gradazione==''){
+        if($request->gradazione=='' || $request->gradazione<=0){
           $risposta= " Si è tentato di fare una richiesta all'api in un modo errato, seguire la procedura come segue:
            127.0.0.1:8000/api.getBeerValue?gradazione=% dove al posto di % va inserita la gradazione che desideri,
            ti verrà restituita una birra casuale con quella gradazione!";

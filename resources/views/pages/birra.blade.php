@@ -8,7 +8,7 @@
         <font face="Verdana" size="20" color="black">
           HappyBeerDay
         </font>
-          <button type="button" id="scemo" class="block" onclick="window.location='{{ URL::route('birra') }}' ">
+          <button type="button" id="prova" class="block" onclick="window.location='{{ URL::route('birra') }}' ">
             <span>Get Random Beer</span>
           </button>
       </div>
@@ -20,7 +20,7 @@
 @section('footer_script_init')
 <script>
 function ciao(){
-  console.log("PORCODIO");
+  console.log("ciao");
 }
 
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 //require "vendor/autoload.php";
+//require '\vendor\autoload.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,6 +18,8 @@ use App\Traits\Throttles;
 use BadMethodCallException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use  PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class BeerControllers extends Controller {
     use Throttles;
@@ -41,6 +44,20 @@ class BeerControllers extends Controller {
        *
        * @return \Illuminate\Contracts\Support\Renderable
        */
+
+       public function prova(){
+         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+         $channel = $connection->channel();
+
+         $channel->queue_declare('hello', false, false, false, false);
+
+         $msg = new AMQPMessage('Birra caricata sul database');
+         $channel->basic_publish($msg, '', 'hello');
+
+         $channel->close();
+         $connection->close();
+       }
+
        public function casualBeer() {
               //too many failed login attempts
            //attempt API authentication
@@ -49,6 +66,7 @@ class BeerControllers extends Controller {
            $CONSUMER_SECRET='ZhtFQSgg3vWUMaHogrOO5AwmlndIDfKIDsH7KP7NrKHGRaoVs6';
            $access_token='1168526948542353409-UD3JX91SHW49lh2NfPxZN71TTcubGW';
            $access_token_secret='AMiRPlQohpBxU0h1HNpchCozVQi7sqv9n2ghnv8GKl21t';
+           BeerControllers::prova();
            try {
              //var_dump($request->all());die;
                $result = $this->httpHelper->get("https://api.punkapi.com/v2/beers/random",[
@@ -95,7 +113,6 @@ class BeerControllers extends Controller {
       $result .= "         Se invece vuoi un suggerimento per una birra della
       gradazione che vuoi, fai richiesta come mostrato nell'esempio che segue: 127.0.0.1:8000/api.getBeerValue?gradazione=%
       dove al posto di % va inserita la gradazione che desideri, ti verrà restituita una birra casuale con quella gradazione!";
-      $result=json_decode($result, true);
         return response($result, 200);
       }
 

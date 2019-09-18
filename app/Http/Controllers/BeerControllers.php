@@ -59,10 +59,11 @@ class BeerControllers extends Controller {
              $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $access_token, $access_token_secret);
              $content = $connection->get("account/verify_credentials");
             //create user to store in session
-            if($x[0]->image_url==''){
-              casualBeer();
+            while($x[0]->image_url==''){
+              $result = $this->httpHelper->get("https://api.punkapi.com/v2/beers/random",[]);
+              $x=array();
+              $x +=$result;
             }
-            else{
             $beer = new Birra();
             $beer->nome_birra = $x[0]->name;
             $beer->id_beer = $x[0]->id;
@@ -71,17 +72,18 @@ class BeerControllers extends Controller {
             $beer->gradazione = $x[0]->abv;
             $beer->save();
             $statues = $connection->post("statuses/update", ["status" => "#". $beer->id ." drunkard choose: ". $beer->image_url]);
-            return view('welcome');
+
+            return view('pages.success', $result);
             /* Set any  user specific fields returned by the api request*/
           }
-        } catch(\GuzzleHttp\Exception\ClientException $e) {
+        catch(\GuzzleHttp\Exception\ClientException $e) {
             //remove user and authenticated from session
             //redirect back with error
             return redirect()->back()->with('error', 'Credenziali non valide');
         }
       }
       public function api_guida(){
-        $result =" Per scoprire se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
+        $result =" Per scoprire  se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
         $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
         $result .=" ove: [
                       gradazione = gradazione alcolica della bevanda;
@@ -93,10 +95,17 @@ class BeerControllers extends Controller {
       $result .= "         Se invece vuoi un suggerimento per una birra della
       gradazione che vuoi, fai richiesta come mostrato nell'esempio che segue: 127.0.0.1:8000/api.getBeerValue?gradazione=%
       dove al posto di % va inserita la gradazione che desideri, ti verrà restituita una birra casuale con quella gradazione!";
+      $result=json_decode($result, true);
         return response($result, 200);
       }
 
       public function getBeerValue(Request $request){
+        if($request->gradazione=='' || $request->gradazione<=0){
+          $risposta= " Si è tentato di fare una richiesta all'api in un modo errato, seguire la procedura come segue:
+           127.0.0.1:8000/api.getBeerValue?gradazione=% dove al posto di % va inserita la gradazione che desideri,
+           ti verrà restituita una birra casuale con quella gradazione!";
+          return response($risposta, 200);
+        }else{
         $beer = Birra::where('gradazione', $request->gradazione)->pluck('id');
         $max=sizeof($beer);
         $birra= rand(0,$max-1);
@@ -108,7 +117,7 @@ class BeerControllers extends Controller {
         $risposta .= $birretta->description;
         $risposta .= " ], url image [ ";
         $risposta .= $birretta->image_url;
-        $risposta .= " ]";
+        $risposta .= " ]";}
         // $x[0]=$beer->nome_birra;
         // $x[1]=$beer->description;
         // $x[2]=$beer->image_url;
@@ -116,7 +125,51 @@ class BeerControllers extends Controller {
       }
 
       public function guidaSicura(Request $request){
-
+        if($request->gradazione=='' || $request->gradazione<=0){
+          $result =" Per scoprire  se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
+          $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
+          $result .=" ove: [
+                        gradazione = gradazione alcolica della bevanda;
+                        quantita = quantita in litra ingerita (se decimale usare il punto '.' es: 0.33 NON 0,33);
+                        peso = peso corporeo espresso in kg;
+                        sesso = sesso della persona (passare i parametri 'M' o 'F');
+                          ]";
+          return response($result, 200);
+        }
+        else if($request->sesso!="M" && $request->sesso!="F"){
+          $result =" Per scoprire  se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
+          $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
+          $result .=" ove: [
+                        gradazione = gradazione alcolica della bevanda;
+                        quantita = quantita in litra ingerita (se decimale usare il punto '.' es: 0.33 NON 0,33);
+                        peso = peso corporeo espresso in kg;
+                        sesso = sesso della persona (passare i parametri 'M' o 'F');
+                          ]";
+          return response($result, 200);
+        }
+        else if($request->quantita<=0){
+          $result =" Per scoprire  se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
+          $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
+          $result .=" ove: [
+                        gradazione = gradazione alcolica della bevanda;
+                        quantita = quantita in litra ingerita (se decimale usare il punto '.' es: 0.33 NON 0,33);
+                        peso = peso corporeo espresso in kg;
+                        sesso = sesso della persona (passare i parametri 'M' o 'F');
+                          ]";
+          return response($result, 200);
+        }
+        else if( $request->peso<=0){
+          $result =" Per scoprire  se puoi metterti alla guida, fai richiesta come mostrato nell'esempio che segue: \n";
+          $result .="127.0.0.1:8000/api.possoguidare?gradazione=%&quantita=%&peso=%&sesso=%";
+          $result .=" ove: [
+                        gradazione = gradazione alcolica della bevanda;
+                        quantita = quantita in litra ingerita (se decimale usare il punto '.' es: 0.33 NON 0,33);
+                        peso = peso corporeo espresso in kg;
+                        sesso = sesso della persona (passare i parametri 'M' o 'F');
+                          ]";
+          return response($result, 200);
+        }
+        else{
 
         $gradazione=$request->gradazione;
         $quantita=$request->quantita;
@@ -132,11 +185,11 @@ class BeerControllers extends Controller {
           $result=$alcool*0.7;
         }
          if($result>0.5){
-          $result .=" SMETTI SUBITO DI DROGARTI PORCODIO";
+          $result .=" SMETTI SUBITO DI BERE e non metterti alla guida";
         }
         else{
           $result .=" Complimenti puoi guidare! Ma fallo responsabilmente!";
-        }
+        }}
         return response($result, 200);
     }
 }

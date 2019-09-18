@@ -12,10 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.birra');
 });
 
-Route::get('/beer', 'BeerControllers@casualBeer');
+Route::get('/beer', 'BeerControllers@casualBeer')->name("birra");
 
 Route::any('/api.possoguidare','BeerControllers@guidaSicura');
 

@@ -1,9 +1,10 @@
 <!doctype html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>HappyBeerDay</title>
+        <title>Laravel</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -14,15 +15,13 @@
                 background-color: #fff;
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
-                weight: 100%;
-                height: 100%;
+                font-weight: 200;
+                height: 100vh;
                 margin: 0;
-                background-repeat:no-repeat;/*we want to have one single image not a repeated one*/
-                background-size:cover;/*this sets the image to fullscreen covering the whole screen*/
             }
 
             .full-height {
-                height: 100%;
+                height: 100vh;
             }
 
             .flex-center {
@@ -64,7 +63,7 @@
             }
         </style>
     </head>
-    <body background='https://cdn.gelestatic.it/deejay/sites/2/2019/01/birra.jpg' style="height: 100%, weight: 100%;">
+    <body>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -82,18 +81,19 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    HappyBeerDay
+                    Laravel
                 </div>
-                <button name="button"  id="chiamataGet" onclick="getBeer();" type="button"><span>Get Random Beer</span></button>
+
+                <div class="links">
+                    <a href="https://laravel.com/docs">Docs</a>
+                    <a href="https://laracasts.com">Laracasts</a>
+                    <a href="https://laravel-news.com">News</a>
+                    <a href="https://blog.laravel.com">Blog</a>
+                    <a href="https://nova.laravel.com">Nova</a>
+                    <a href="https://forge.laravel.com">Forge</a>
+                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                </div>
             </div>
         </div>
     </body>
-    <html>
-
-    @section('footer_script_init')
-    <script>
-    function getBeer(){
-    $('#chiamataGet').redirect('/beer');
-    }
-    </script>
-@stop
+</html>

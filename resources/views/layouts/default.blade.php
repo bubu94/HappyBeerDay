@@ -2,10 +2,22 @@
 <html>
 <head>
   <title>HappyBeerDay</title>
+    @include('includes.css')
 </head>
 
 
+
 <style>
+.block {
+  display: block;
+  width: 40%;
+  border: none;
+  background-color: #949200;
+  padding: 14px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+
 .lead.text-muted {
   margin-top:6% !important;
 }
@@ -42,6 +54,7 @@
   <body>
 
     <div id="wrapper">
+      @include('includes.header')
 
 
       <div class="clearfix"></div>
@@ -56,6 +69,7 @@
 
 
 
+    @include('includes.footer')
     @yield('footer_script_init')
 
       <script>
